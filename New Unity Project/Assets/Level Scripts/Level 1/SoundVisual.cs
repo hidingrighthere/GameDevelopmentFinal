@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class SoundVisual : MonoBehaviour
 {
+
+
+    private Transform GodHead;
+    private Vector3 start;
+
+
+
     private const int SAMPLE_SIZE = 1024;
 
 
@@ -30,6 +37,9 @@ public class SoundVisual : MonoBehaviour
 	// Use this for initialization
 	private void Start ()
     {
+
+        GodHead = GameObject.FindGameObjectWithTag("GodHead").transform;
+
         source = GetComponent<AudioSource>();
         samples = new float[1024];
         spectrum = new float[1024];
@@ -73,6 +83,16 @@ public class SoundVisual : MonoBehaviour
                 visualScale[visualIndex] = maxVisualScale;
             
             visualList[visualIndex].localScale = Vector3.one + Vector3.up * visualScale[visualIndex];
+
+            
+
+           //Update the z value
+           Vector3 pos = new Vector3(visualList[visualIndex].transform.position.x, visualList[visualIndex].transform.position.y, GodHead.position.z - 5);
+           GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+           go.transform.position = pos;
+           go.transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
+           visualList[visualIndex] = go.transform;
+           
             visualIndex++;
         }
     }
@@ -136,6 +156,8 @@ public class SoundVisual : MonoBehaviour
 
     private void SpawnCircle()
     {
+
+
         visualScale = new float[amnVisual];
         visualList = new Transform[amnVisual];
 
@@ -154,7 +176,7 @@ public class SoundVisual : MonoBehaviour
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
             visualList[i] = go.transform;
-
+            //new Vector3(GodHead.position.x, GodHead.position.y, GodHead.position.z -5);
         }
 
     }
