@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7d3425a6c7317e048be11c2ff72db69e
+guid: f150b16d2a29e784e855a6a5a314068a
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -56,8 +56,7 @@ ModelImporter:
     100100: Bip001 Spine
     100102: Bip001 Spine1
     100104: Bip001 Spine2
-    100106: Body_01
-    100108: //RootNode
+    100106: //RootNode
     400000: Bip001
     400002: Bip001 Head
     400004: Bip001 L Calf
@@ -111,22 +110,15 @@ ModelImporter:
     400100: Bip001 Spine
     400102: Bip001 Spine1
     400104: Bip001 Spine2
-    400106: Body_01
-    400108: //RootNode
-    4300000: Body_01
+    400106: //RootNode
+    7400000: mixamo.com
     9500000: //RootNode
-    13700000: Body_01
-  externalObjects:
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: Body_01
-    second: {fileID: 2100000, guid: dd57fea2d38633a42be0ca58ae57c683, type: 2}
+  externalObjects: {}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -152,12 +144,12 @@ ModelImporter:
     isReadable: 1
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.01
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
-    importVisibility: 0
+    importVisibility: 1
     importBlendShapes: 1
-    importCameras: 0
+    importCameras: 1
     importLights: 0
     swapUVChannels: 0
     generateSecondaryUV: 0
@@ -166,19 +158,19 @@ ModelImporter:
     keepQuads: 0
     weldVertices: 1
     preserveHierarchy: 0
-    indexFormat: 1
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 0
+    useFileScale: 1
     previousCalculatedGlobalScale: 0.01
     hasPreviousCalculatedGlobalScale: 1
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
-    tangentImportMode: 4
-    normalCalculationMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
   importAnimation: 1
   copyAvatar: 0
   humanDescription:
@@ -193,14 +185,14 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: Bip001
-    rootMotionBoneRotation: {x: -0.50000036, y: 0.49999964, z: 0.49999964, w: 0.50000036}
+    rootMotionBoneRotation: {x: 0.6000737, y: -0.4740093, z: -0.46320492, w: -0.44795978}
     hasTranslationDoF: 0
     hasExtraRoot: 0
-    skeletonHasParents: 0
+    skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
   animationType: 2
   humanoidOversampling: 1
-  additionalBone: 1
+  additionalBone: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
