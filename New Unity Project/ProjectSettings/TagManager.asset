@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - GodHead
+  - Platform
+  - EndGame
   layers:
   - Default
   - TransparentFX
