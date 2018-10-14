@@ -34,11 +34,11 @@ public class PlayerController : MonoBehaviour {
     {
         playerMove = Vector3.zero;
 
-        gravity -= falling * Time.deltaTime * 4;
+        //gravity -= falling * Time.deltaTime * 4;
 
-        playerMove.y = gravity;
+        //playerMove.y = gravity;
 
-        playerController.Move(playerMove * Time.deltaTime);
+        //layerController.Move(playerMove * Time.deltaTime);
     }
 
     void OnCollisionEnter(Collision collision)

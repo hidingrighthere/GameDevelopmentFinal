@@ -33,7 +33,7 @@ public class SoundVisual : MonoBehaviour
     private float[] visualScale;
     public int amnVisual = 64;
 
-
+    private GameObject[] boxs;
 	// Use this for initialization
 	private void Start ()
     {
@@ -41,8 +41,11 @@ public class SoundVisual : MonoBehaviour
         GodHead = GameObject.FindGameObjectWithTag("GodHead").transform;
 
         source = GetComponent<AudioSource>();
+
         samples = new float[1024];
         spectrum = new float[1024];
+        boxs = new GameObject[amnVisual];
+
         sampleRate = AudioSettings.outputSampleRate;
         //  SpawnLine();
         SpawnCircle();
@@ -82,17 +85,19 @@ public class SoundVisual : MonoBehaviour
             if(visualScale[visualIndex] > maxVisualScale)
                 visualScale[visualIndex] = maxVisualScale;
             
-            visualList[visualIndex].localScale = Vector3.one + Vector3.up * visualScale[visualIndex];
+            visualList[visualIndex].localScale = Vector3.one + Vector3.up* visualScale[visualIndex];
 
             
+            
+            //Update the z value
+            Vector3 pos = new Vector3(visualList[visualIndex].transform.position.x, visualList[visualIndex].transform.position.y, GodHead.position.z - 5);
+            //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
 
-           //Update the z value
-           Vector3 pos = new Vector3(visualList[visualIndex].transform.position.x, visualList[visualIndex].transform.position.y, GodHead.position.z - 5);
-           GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
-           go.transform.position = pos;
-           go.transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
-           visualList[visualIndex] = go.transform;
-           
+
+            boxs[visualIndex].transform.position = pos;
+            boxs[visualIndex].transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
+            visualList[visualIndex] = boxs[visualIndex].transform;
+        
             visualIndex++;
         }
     }
@@ -176,6 +181,7 @@ public class SoundVisual : MonoBehaviour
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
             visualList[i] = go.transform;
+            boxs[i] = go;
             //new Vector3(GodHead.position.x, GodHead.position.y, GodHead.position.z -5);
         }
 
