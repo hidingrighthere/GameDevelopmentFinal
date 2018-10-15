@@ -17,7 +17,7 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        transform.position = new Vector3(Player.position.x, Player.position.y + 2, Player.position.z - 3);
+        transform.position = new Vector3(Player.position.x, 0, Player.position.z - 3);
      //   transform.position = Player.position;
     }
 }

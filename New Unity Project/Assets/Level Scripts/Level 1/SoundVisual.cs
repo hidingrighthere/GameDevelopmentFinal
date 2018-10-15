@@ -9,9 +9,10 @@ public class SoundVisual : MonoBehaviour
     private Transform GodHead;
     private Vector3 start;
 
+    public Material mat;
+    public Color newCol;
 
-
-    private const int SAMPLE_SIZE = 1024;
+    private const int SAMPLE_SIZE = 512;
 
 
     public float rmsValue;
@@ -90,9 +91,8 @@ public class SoundVisual : MonoBehaviour
             
             
             //Update the z value
-            Vector3 pos = new Vector3(visualList[visualIndex].transform.position.x, visualList[visualIndex].transform.position.y, GodHead.position.z - 5);
+            Vector3 pos = new Vector3(visualList[visualIndex].transform.position.x, visualList[visualIndex].transform.position.y, GodHead.position.z + 5);
             //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
-
 
             boxs[visualIndex].transform.position = pos;
             boxs[visualIndex].transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
@@ -167,7 +167,7 @@ public class SoundVisual : MonoBehaviour
         visualList = new Transform[amnVisual];
 
         Vector3 center = Vector3.zero;
-        float radius = 10.0f;
+        float radius = 15.0f;
 
         for(int i = 0; i < amnVisual; i++)
         {
@@ -177,7 +177,11 @@ public class SoundVisual : MonoBehaviour
             float y = center.y + Mathf.Sin(ang) * radius;
 
             Vector3 pos = new Vector3(x, y, 0);
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+            //GameObject go = GameObject.CreatePrimitive(PrimitiveType.Cube) as GameObject;
+            GameObject orig = GameObject.FindGameObjectWithTag("Test");
+
+            GameObject go = Instantiate(orig);
+            //go.GetComponent<Renderer>().material.color = newCol;
             go.transform.position = pos;
             go.transform.rotation = Quaternion.LookRotation(Vector3.forward, pos);
             visualList[i] = go.transform;

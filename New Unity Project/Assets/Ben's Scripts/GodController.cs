@@ -19,7 +19,7 @@ public class GodController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Player.position.x-1, Player.position.y + 3, Player.position.z + 40);
+        transform.position = new Vector3(Player.position.x, Player.position.y, Player.position.z + 15);
         //   transform.position = Player.position;
     }
 }

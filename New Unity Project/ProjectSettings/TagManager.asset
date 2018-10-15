@@ -7,6 +7,8 @@ TagManager:
   - GodHead
   - Platform
   - EndGame
+  - Player2
+  - Test
   layers:
   - Default
   - TransparentFX
