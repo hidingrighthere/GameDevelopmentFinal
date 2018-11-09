@@ -6,6 +6,7 @@ public class CameraController : MonoBehaviour {
 
     private Transform Player;
     private Vector3 start;
+    public int iX, iY, iZ; //Used to control the camera
 
 	// Use this for initialization
 	void Start () {
@@ -17,7 +18,11 @@ public class CameraController : MonoBehaviour {
 	// Update is called once per frame
 	void Update ()
     {
-        transform.position = new Vector3(Player.position.x, 0, Player.position.z - 3);
-     //   transform.position = Player.position;
+        //Rotates the camera
+        //float mouseInput = Input.GetAxis("Mouse X");
+        //Vector3 lookhere = new Vector3(0, mouseInput, 0);
+        //transform.Rotate(lookhere);
+
+        transform.position = new Vector3(Player.position.x - iX, iY, Player.position.z - iZ);
     }
 }

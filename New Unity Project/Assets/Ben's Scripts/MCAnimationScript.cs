@@ -26,8 +26,6 @@ public class MCAnimationScript : MonoBehaviour {
     void Update()
     {
         
-        
-        
         //Jump
         if (Input.GetKeyDown("space"))
         {
