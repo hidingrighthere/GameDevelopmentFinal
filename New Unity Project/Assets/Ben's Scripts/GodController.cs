@@ -7,7 +7,8 @@ public class GodController : MonoBehaviour {
 
     private Transform Player;
     private Vector3 start;
-
+    public int iY;
+    public int iZ;
     // Use this for initialization
     void Start()
     {
@@ -19,7 +20,7 @@ public class GodController : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        transform.position = new Vector3(Player.position.x, Player.position.y, Player.position.z + 15);
+        transform.position = new Vector3(Player.position.x, Player.position.y-iY, Player.position.z + iZ);
         //   transform.position = Player.position;
     }
 }
