@@ -9,124 +9,226 @@ public class PlayerController : MonoBehaviour
 
 
     private CharacterController playerController;
-    private Vector3 playerMove;
-    public Animator anim; //Used to control the player's animations
+    private Vector3 playerMove; //Used to move the player around
+    private Animator anim;      //Used to control the player's animations
+    public GameObject FireWings; //Fire Wings
 
     public static float speed = 8.0f; //how fast we want the player to move
+    public  float jumpForce; //How strong we want the jump to be
+
+
+
     private float sideSpeed = 4.0f; //Controls how fast we move left to right
-    private float gravity = 0.0f;
+    private static float gravity = 5.0f; //Controls the gravity
     private float falling = 12.0f;
     private float jumpPower = 1.0f;
 
+
     private int jump; //will be 1 for jumping, -1 for not jumping
+
+
     private float iJumpTime;
+
+    //Powerups
+    private bool bGrounded; //Used to determine if a land trigger should be called
+    private bool ReverseGravity; //Reverses the gravity
+    private bool flight; //Allows flight controls
 
     // Use this for initialization
     void Start()
     {
         playerController = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        bGrounded = true;
+        ReverseGravity = false;
+        flight = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        TestPowerups(); //Test powerups based on key clicks
+        HandleControls();
 
-        CheckIfGameEnded(); //checks if game ended for any reason
-        RotatePlayer(); //Rotates player
-        KeyPress("Space_Pressed", "space"); //Checks to see if the player jumps
-
-        PlayerJump();
-
-        //X
-        //Make sure the player can only move along the x axis a certain amount
-        playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
-
-        if (Input.GetKeyDown(KeyCode.Space))
-            anim.SetTrigger("Jump_Pressed");
-
-        /*
-        //Y
-        //if I'm grounded and I press space
-        if (Input.GetKey(KeyCode.Space) && playerController.isGrounded)
+        Vector3 test = new Vector3(0, 5, 0);
+        //if not grounded, don't do anything
+        if (!bGrounded)
         {
-            jump = 1;
+
+            if(ReverseGravity)
+                playerMove.y += 1;
+            else
+                playerMove.y -= 1;
+
+
+            CheckForReverseGravity();
         }
 
-        //If I'm grounded and currently dropping
-        if (playerController.isGrounded && jump == 0) //if the player is on the floor
-        {
-            gravity = -0.5f;
-        }
-
-        if (jump == 0) //no jump 
-        {
-            transform.Rotate(Vector3.up * 0);
-            gravity -= falling * Time.deltaTime * 4;
-
-        }
-        if (jump == 1) //with jump
-        {
-            gravity += falling * Time.deltaTime * 2;
-
-        }
-        playerMove.y = gravity;
-        */
-        //Z
-        playerMove.z = transform.forward.z * speed; //Constantly moves us forward
-        
-        //Rotates the player
-        float mouseInput = Input.GetAxis("Mouse X");
-        Vector3 lookhere = new Vector3(0, mouseInput, 0);
-        transform.Rotate(lookhere);
 
         playerController.Move(playerMove * Time.deltaTime);
+
     }
 
+    //Handles controls when specific events occur
+    private void HandleControls()
+    {
+        //Used to get rid of some of the force when going up and down
+        int iPrevKey = 0;
+
+        //Handles flight
+        if(flight)
+        {
+            playerMove.y = Input.GetAxisRaw("Vertical") * sideSpeed;
+           
+
+            playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
+
+        }
+
+        //Running
+        else if(bGrounded)
+        {
+
+            CheckIfGameEnded(); //checks if game ended for any reason
+            //CheckForReverseGravity();
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce);
+                anim.SetTrigger("Jump");
+            }
+
+
+            //X
+            //Make sure the player can only move along the x axis a certain amount
+            playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
+
+            //Y
+
+            //Z
+            playerMove.z = transform.forward.z * speed; //Constantly moves us forward
+
+            //Rotates the player
+            //RotatePlayer();
+        }
+        playerController.Move(playerMove * Time.deltaTime);
+
+    }
+    //Tests powerups, used only for debugging
+    private void TestPowerups()
+    {
+        //If g is press !ReverseGravity
+        if(Input.GetKeyDown(KeyCode.G))
+        {
+            GetComponent<Rigidbody>().useGravity = !GetComponent<Rigidbody>().useGravity; //Removes graity
+            ReverseGravity = !(ReverseGravity); //Reverse
+            Debug.Log("Reverse gravity is now" + ReverseGravity);
+            bGrounded = false;
+        
+            anim.SetTrigger("Fall");
+            if (ReverseGravity)
+                playerMove.y = 3;
+            else
+                playerMove.y = -3;
+            playerController.Move(playerMove);
+        }
+
+        //If Y is pressed, change the speed
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            speed += 50;
+        }
+        //If Y is pressed, change the speed
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            GetComponent<Rigidbody>().useGravity = false; //Get rid of gravity
+            anim.SetTrigger("Fly");
+            Instantiate(FireWings);
+            flight = true;
+
+        }
+
+    }
     //Handles the player's jump
     private void PlayerJump()
     {
-       
+
 
     }
-    public void KeyPress(string animEffected, string key)
+    //Reverses gravity
+    private void CheckForReverseGravity()
     {
-        if (Input.GetKeyDown(key))
+
+        // Vector3 lookhere = new Vector3(transform.rotation.x - 10, 0, 0);
+        //Will change x to -180 and y to 180
+        if (ReverseGravity == true)
         {
-            anim.SetBool(animEffected, true);
+            if(transform.localEulerAngles.z != 180)
+                transform.Rotate(0, 0, 180);
+
         }
-        if (Input.GetKeyUp(key))
+
+        //Will change x back to 0 and y back to 0
+        else if (ReverseGravity == false)
         {
-            anim.SetBool(animEffected, false);
+            if (transform.localEulerAngles.z != 0)
+                transform.Rotate(0, 0, -(transform.localEulerAngles.z));
         }
+
+
     }
 
-
-    void OnCollisionEnter(Collision collision)
+    //Handles forms of collisions
+    void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        // print("Hello\n");
-        if (collision.gameObject.tag == "Arrow")
+        GameObject collision = hit.gameObject;
+        if (!bGrounded)
         {
-            speed += 2.0f;
-            print("Hello");
+            Debug.Log("CHANGING GROUNDED TO TRUE");
+            bGrounded = true;
+            anim.SetTrigger("Fall_Land");
+        }
+        //Start Flying
+        if (collision.gameObject.tag == "StartFly")
+        {
+            Instantiate(FireWings);
+        }
+
+        //End Flying
+        if(collision.gameObject.tag == "EndFly")
+        {
+            Destroy(FireWings);
+        }
+        //Gravity reversal
+        if(collision.gameObject.tag == "ReverseGravity")
+        {
+
+        }
+
+        //invisible platform jump
+        if(collision.gameObject.tag == "InvisJump")
+        {
+
         }
         playerMove.z = 0.0f;
     }
 
 
+
+
+
+
+
+
+
+
     //Rotates player based on mouse movement
     public void RotatePlayer()
     {
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        Plane plane = new Plane(Vector3.up, Vector3.zero);
-        float distance;
-        if (plane.Raycast(ray, out distance))
-        {
-            Vector3 target = ray.GetPoint(distance);
-            Vector3 direction = target - transform.position;
-            float rotation = Mathf.Atan2(direction.x, direction.z) * Mathf.Rad2Deg;
-            transform.rotation = Quaternion.Euler(0, rotation, 0);
-        }
+
+        float mouseInput = Input.GetAxis("Mouse X");
+        Vector3 lookhere = new Vector3(0, mouseInput, 0);
+        transform.Rotate(lookhere);
     }
 
         public void CheckIfGameEnded()

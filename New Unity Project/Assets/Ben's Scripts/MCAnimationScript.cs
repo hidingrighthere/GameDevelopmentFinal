@@ -25,7 +25,7 @@ public class MCAnimationScript : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        
+        /*
         //Jump
         if (Input.GetKeyDown("space"))
         {
@@ -61,6 +61,6 @@ public class MCAnimationScript : MonoBehaviour {
         {
             transform.Rotate(Vector3.up * 0);
             anim.SetBool("Key_Right", false);
-        }
+        }*/
     }
 }
