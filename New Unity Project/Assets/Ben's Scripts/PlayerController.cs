@@ -72,15 +72,12 @@ public class PlayerController : MonoBehaviour
     //Handles controls when specific events occur
     private void HandleControls()
     {
-        //Used to get rid of some of the force when going up and down
-        int iPrevKey = 0;
-
         //Handles flight
         if(flight)
         {
+            //Move up and down
             playerMove.y = Input.GetAxisRaw("Vertical") * sideSpeed;
-           
-
+            //Move left and right
             playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
 
         }
@@ -143,8 +140,10 @@ public class PlayerController : MonoBehaviour
         {
             GetComponent<Rigidbody>().useGravity = false; //Get rid of gravity
             anim.SetTrigger("Fly");
-            Instantiate(FireWings);
-            flight = true;
+            var createFireWings = Instantiate(FireWings, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            createFireWings.transform.Rotate(90, 0, 0);
+            createFireWings.transform.parent = gameObject.transform;
+            flight = !flight;
 
         }
 
