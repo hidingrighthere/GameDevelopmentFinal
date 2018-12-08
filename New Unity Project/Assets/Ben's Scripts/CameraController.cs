@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CameraController : MonoBehaviour {
+public class CameraController : MonoBehaviour
+{
 
     private Transform Player;
     private Vector3 start;
     public int iX, iY, iZ; //Used to control the camera
     private int iGravityY; //Used to adjust the camera when gravity reverses
     private bool ReverseGravity;
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start()
+    {
         Player = GameObject.FindGameObjectWithTag("Player").transform;
         //     start = transform.position - Player.position;
         iGravityY = -1;
         ReverseGravity = false;
 
     }
-	
-	// Update is called once per frame
-	void Update ()
+
+    // Update is called once per frame
+    void Update()
     {
         //Rotates the camera
         //float mouseInput = Input.GetAxis("Mouse X");
@@ -29,6 +31,7 @@ public class CameraController : MonoBehaviour {
         //If g is press !ReverseGravity
         if (Input.GetKeyDown(KeyCode.G))
         {
+
             ReverseGravity = !ReverseGravity;
 
             if (ReverseGravity == true)

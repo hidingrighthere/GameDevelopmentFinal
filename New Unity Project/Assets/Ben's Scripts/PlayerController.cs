@@ -103,7 +103,7 @@ public class PlayerController : MonoBehaviour
             //Y
 
             //Z
-            playerMove.z = transform.forward.z * speed; //Constantly moves us forward
+            //playerMove.z = transform.forward.z * speed; //Constantly moves us forward
 
             //Rotates the player
             //RotatePlayer();
@@ -111,9 +111,11 @@ public class PlayerController : MonoBehaviour
         playerController.Move(playerMove * Time.deltaTime);
 
     }
+
     //Tests powerups, used only for debugging
     private void TestPowerups()
     {
+
         //If g is press !ReverseGravity
         if(Input.GetKeyDown(KeyCode.G))
         {
@@ -121,15 +123,18 @@ public class PlayerController : MonoBehaviour
             ReverseGravity = !(ReverseGravity); //Reverse
             Debug.Log("Reverse gravity is now" + ReverseGravity);
             bGrounded = false;
-        
+
             anim.SetTrigger("Fall");
             if (ReverseGravity)
-                playerMove.y = 3;
+                playerMove.y = 0.1f;
             else
-                playerMove.y = -3;
+                playerMove.y = -0.1f;
+
             playerController.Move(playerMove);
+
         }
 
+       
         //If Y is pressed, change the speed
         if(Input.GetKeyDown(KeyCode.Y))
         {
@@ -148,6 +153,8 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+
+
     //Handles the player's jump
     private void PlayerJump()
     {
