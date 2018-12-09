@@ -43,7 +43,7 @@ public class GodController : MonoBehaviour {
         deltaTime = GetComponent<AudioSource>().time - lastTime;
         timer += deltaTime;
 
-        Debug.Log("Timer = " + timer + " vs BPM = " + (60f/bpm));
+        //Debug.Log("Timer = " + timer + " vs BPM = " + (60f/bpm));
         //On the beat do something
         if(timer >= (60f/bpm))
         {

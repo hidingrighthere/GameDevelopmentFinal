@@ -9,6 +9,7 @@ TagManager:
   - EndGame
   - Player2
   - Test
+  - LeftArm
   layers:
   - Default
   - TransparentFX
