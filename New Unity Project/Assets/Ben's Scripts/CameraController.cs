@@ -7,14 +7,15 @@ public class CameraController : MonoBehaviour
 
     private Transform Player;
     private Vector3 start;
-    public int iX, iY, iZ; //Used to control the camera
+    public float iX, iY, iZ; //Used to control the location of the camera
+
     private int iGravityY; //Used to adjust the camera when gravity reverses
     private bool ReverseGravity;
     // Use this for initialization
     void Start()
     {
         Player = GameObject.FindGameObjectWithTag("Player").transform;
-        //     start = transform.position - Player.position;
+        RotateCamera();
         iGravityY = -1;
         ReverseGravity = false;
 
@@ -23,11 +24,6 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //Rotates the camera
-        //float mouseInput = Input.GetAxis("Mouse X");
-        //Vector3 lookhere = new Vector3(0, mouseInput, 0);
-        //transform.Rotate(lookhere);
-
         //If g is press !ReverseGravity
         if (Input.GetKeyDown(KeyCode.G))
         {
@@ -53,5 +49,18 @@ public class CameraController : MonoBehaviour
         }
 
         transform.position = new Vector3(Player.position.x - iX, Player.position.y + iY * iGravityY, Player.position.z - iZ);
+        transform.rotation = Player.transform.rotation;
+    }
+
+    //Rotates player based on mouse movement
+    public void RotateCamera()
+    {
+
+        float mouseInputX = Input.GetAxis("Mouse X");
+        float mouseInputY = Input.GetAxis("Mouse Y");
+
+        Vector3 lookhere = new Vector3(0.0f, mouseInputX, 0.0f);
+        transform.Rotate(lookhere);
+
     }
 }

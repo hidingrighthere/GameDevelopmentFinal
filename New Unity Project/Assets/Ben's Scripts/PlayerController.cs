@@ -9,107 +9,120 @@ public class PlayerController : MonoBehaviour
 
 
     private CharacterController playerController;
-    private Vector3 playerMove; //Used to move the player around
-    private Animator anim;      //Used to control the player's animations
+    private Vector3 playerMove = Vector3.zero; //Used to move the player around
     public GameObject FireWings; //Fire Wings
-
-    public static float speed = 8.0f; //how fast we want the player to move
-    public  float jumpForce; //How strong we want the jump to be
-
-
-
-    private float sideSpeed = 4.0f; //Controls how fast we move left to right
-    private static float gravity = 5.0f; //Controls the gravity
-    private float falling = 12.0f;
-    private float jumpPower = 1.0f;
-
-
-    private int jump; //will be 1 for jumping, -1 for not jumping
-
-
-    private float iJumpTime;
 
     //Powerups
     private bool bGrounded; //Used to determine if a land trigger should be called
     private bool ReverseGravity; //Reverses the gravity
     private bool flight; //Allows flight controls
 
+    //Parameters dealing with the x axis
+    public float sideSpeed = 4.0f; //Controls how fast we move left to right
+
+
+    //Parameters dealing with jumping
+    public float jumpHeight; //How high we want to jump
+    public float jumpTime = 2f; //How long the jump occurs for
+    public float jumpSpeed = 2.0f;
+    public float fallMultiplier = 1.0f;
+    private float fTime; //Used to compare times
+
+    //Used to calculate current location
+    public float currY = 0.0f;
+    private float land; //Last landing spot
+
+    //Parameters dealing with the z axis
+    public float speed = 8.0f; //how fast we want the player to move
+
+    //Powerup values
+    private int gravity = -1;
+    private bool reverseGravity; //Tells us when reverse gravity occurs
+    private float ZRotate= 180;
+    private float rotate;
+    private bool rotating = false;
+    public float rotateTime = 3f;
+    public float rotateSpeed = 0.5f;
     // Use this for initialization
     void Start()
     {
         playerController = GetComponent<CharacterController>();
-        anim = GetComponent<Animator>();
         bGrounded = true;
         ReverseGravity = false;
         flight = false;
+        gravity = 1;
     }
 
     // Update is called once per frame
     void Update()
     {
+
         TestPowerups(); //Test powerups based on key clicks
-        HandleControls();
 
-        Vector3 test = new Vector3(0, 5, 0);
-        //if not grounded, don't do anything
-        if (!bGrounded)
+        if(reverseGravity)
         {
+            playerMove.y += (1 * gravity * -1)/rotateTime;
+            playerController.Move(playerMove * Time.deltaTime);
+            
+            //Take out later
+            float aim = 0;
+            if (gravity < 0)
+                aim = 180;
 
-            if(ReverseGravity)
-                playerMove.y += 1;
+            Vector3 to = new Vector3(0, 0, aim);
+            if (Vector3.Distance(transform.eulerAngles, to) > 0.01f)
+            {
+                transform.eulerAngles = Vector3.Lerp(transform.rotation.eulerAngles, to, Time.deltaTime * 4);
+            }
             else
-                playerMove.y -= 1;
-
-
-            CheckForReverseGravity();
+            {
+                transform.eulerAngles = to;
+                reverseGravity = false;
+            }
+            
         }
-
-
-        playerController.Move(playerMove * Time.deltaTime);
+        else
+        {
+            RotatePlayer();
+            HandleControls();
+        }
 
     }
 
     //Handles controls when specific events occur
     private void HandleControls()
     {
+        Debug.Log(gravity);
         //Handles flight
-        if(flight)
+        if (flight)
         {
-            //Move up and down
             playerMove.y = Input.GetAxisRaw("Vertical") * sideSpeed;
-            //Move left and right
             playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
-
         }
 
-        //Running
-        else if(bGrounded)
+        //Handles jumping
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-
-            CheckIfGameEnded(); //checks if game ended for any reason
-            //CheckForReverseGravity();
-
-            if (Input.GetKeyDown(KeyCode.Space))
-            {
-                GetComponent<Rigidbody>().AddForce(Vector3.up * jumpForce);
-                anim.SetTrigger("Jump");
-            }
-
-
-            //X
-            //Make sure the player can only move along the x axis a certain amount
-            playerMove.x = Input.GetAxisRaw("Horizontal") * sideSpeed;
-
-            //Y
-
-            //Z
-            //playerMove.z = transform.forward.z * speed; //Constantly moves us forward
-
-            //Rotates the player
-            //RotatePlayer();
+            fTime = Time.time;
         }
+        //Jump only when grounded and a jump is not occuring
+        if (Input.GetKey(KeyCode.Space) && jumpTime > Time.time - fTime) //when space is pressed
+        { 
+            playerMove.y = jumpHeight * Mathf.Sin(Mathf.PI * ((Time.time - fTime) / jumpTime)) * gravity;
+            Debug.Log("jump");
+        }
+        else
+        {
+            playerMove.y = fallMultiplier * gravity * -1; //gravity
+        }
+
+
+        playerMove.z = transform.forward.z; //Constantly moves us forward
+        playerMove.x = transform.forward.x * sideSpeed;
+
         playerController.Move(playerMove * Time.deltaTime);
 
+        currY = transform.position.y; //get my current Y position
     }
 
     //Tests powerups, used only for debugging
@@ -117,24 +130,15 @@ public class PlayerController : MonoBehaviour
     {
 
         //If g is press !ReverseGravity
-        if(Input.GetKeyDown(KeyCode.G))
+        if (Input.GetKeyDown(KeyCode.G))
         {
-            GetComponent<Rigidbody>().useGravity = !GetComponent<Rigidbody>().useGravity; //Removes graity
-            ReverseGravity = !(ReverseGravity); //Reverse
-            Debug.Log("Reverse gravity is now" + ReverseGravity);
-            bGrounded = false;
-
-            anim.SetTrigger("Fall");
-            if (ReverseGravity)
-                playerMove.y = 0.1f;
-            else
-                playerMove.y = -0.1f;
-
+            reverseGravity = true;
+            playerMove.y += 10 * gravity;
             playerController.Move(playerMove);
-
+            gravity = (-1) * gravity; //reverse gravity   
+ 
         }
 
-       
         //If Y is pressed, change the speed
         if(Input.GetKeyDown(KeyCode.Y))
         {
@@ -144,7 +148,6 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F))
         {
             GetComponent<Rigidbody>().useGravity = false; //Get rid of gravity
-            anim.SetTrigger("Fly");
             var createFireWings = Instantiate(FireWings, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
             createFireWings.transform.Rotate(90, 0, 0);
             createFireWings.transform.parent = gameObject.transform;
@@ -155,45 +158,11 @@ public class PlayerController : MonoBehaviour
     }
 
 
-    //Handles the player's jump
-    private void PlayerJump()
-    {
-
-
-    }
-    //Reverses gravity
-    private void CheckForReverseGravity()
-    {
-
-        // Vector3 lookhere = new Vector3(transform.rotation.x - 10, 0, 0);
-        //Will change x to -180 and y to 180
-        if (ReverseGravity == true)
-        {
-            if(transform.localEulerAngles.z != 180)
-                transform.Rotate(0, 0, 180);
-
-        }
-
-        //Will change x back to 0 and y back to 0
-        else if (ReverseGravity == false)
-        {
-            if (transform.localEulerAngles.z != 0)
-                transform.Rotate(0, 0, -(transform.localEulerAngles.z));
-        }
-
-
-    }
-
     //Handles forms of collisions
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
+        Debug.Log("Test Collision");
         GameObject collision = hit.gameObject;
-        if (!bGrounded)
-        {
-            Debug.Log("CHANGING GROUNDED TO TRUE");
-            bGrounded = true;
-            anim.SetTrigger("Fall_Land");
-        }
         //Start Flying
         if (collision.gameObject.tag == "StartFly")
         {
@@ -216,28 +185,29 @@ public class PlayerController : MonoBehaviour
         {
 
         }
-        playerMove.z = 0.0f;
+        else
+        {
+            
+            bGrounded = true; //We have collided with something
+            land = transform.position.y; //Save the collision
+        }
     }
-
-
-
-
-
-
-
-
-
 
     //Rotates player based on mouse movement
     public void RotatePlayer()
     {
 
-        float mouseInput = Input.GetAxis("Mouse X");
-        Vector3 lookhere = new Vector3(0, mouseInput, 0);
+        float mouseInputX = Input.GetAxis("Mouse X");
+        float mouseInputY = Input.GetAxis("Mouse Y");
+
+        Vector3 lookhere = new Vector3(0, mouseInputX * sideSpeed, 0);
+
         transform.Rotate(lookhere);
+
+
     }
 
-        public void CheckIfGameEnded()
+     public void CheckIfGameEnded()
     {
         if (playerMove.y < -50)
         {
