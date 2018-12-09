@@ -19,14 +19,19 @@ public class LevelSpawner : MonoBehaviour
 
     //Vectors for the hand spawning
     private Vector3[] vArray = new Vector3[4];
-    private Vector3 RBase_UpperArm = new Vector3(54.59f, 38, 103);
-    private Vector3 RAwake_UpperArm = new Vector3(54.59f, 98, 200);
+    private Vector3 RBase_UpperArm = new Vector3(54, 38, 103);
     private Vector3 LBase_UpperArm = new Vector3(-50, -38, 103);
+    private Vector3 RAwake_UpperArm = new Vector3(54, 98, 200);
     private Vector3 LAwake_UpperArm = new Vector3(-50 -95, 190);
 
+    
     //If parameters used to determine what to do
     private int CurrArm; //0 for left arm, 1 for right arm
 
+    //Time parameters
+    private float fStartTime; //Start Time
+    public float fTime = 4; //How long we want the animation to go for
+    private float t;
 
     private static bool Spawn = true; //if true, spawn in a new material
 
@@ -36,15 +41,16 @@ public class LevelSpawner : MonoBehaviour
 	// Use this for initialization
 	void Start ()
     {
-        mat = GetComponent<Renderer>().material;
         //Set up arm rotation array
         vArray[0] = RBase_UpperArm;
         vArray[1] = LBase_UpperArm;
         vArray[2] = RAwake_UpperArm;
         vArray[3] = LAwake_UpperArm;
         //Set up arm object array
-        aArms[0] = RArm;
-        aArms[1] = LArm;
+        aArms[0] = GameObject.FindGameObjectWithTag("RightArm");
+        aArms[1] = GameObject.FindGameObjectWithTag("LeftArm");
+        
+        fStartTime = Time.deltaTime; 
     }
 	
 	// Update is called once per frame
@@ -52,51 +58,50 @@ public class LevelSpawner : MonoBehaviour
     {
         if(Spawn)
         {
-            Debug.Log("Try Moving Arm");
-            CurrArm = (int)Random.Range(0f, 1f); //Choose a random number between 0 and 1
-            Debug.Log(CurrArm);
+
+            t += Time.deltaTime / fTime;
+
             CurrArm = 0;
-            currObject = LArm;  //Set the gameobject
-                                //begin moving to spawn animation
-
-
-            currObject.transform.rotation = Quaternion.Euler(vArray[CurrArm + 2]);
+            currObject = aArms[CurrArm];
             Vector3 to = vArray[CurrArm + 2];
-            Instantiate(create, transform.position, Quaternion.identity);
-
-            //Create the level piece
-            Instantiate(level[currItem], transform.position, Quaternion.identity);
-            Spawn = false;
-            /*
-            if (Vector3.Distance(currObject.transform.eulerAngles, to) > 0.01f)
+            Quaternion target = Quaternion.Euler(to);
+           
+            if (Vector3.Distance(currObject.transform.eulerAngles, to) >= 0.01f)
             {
-                currObject.transform.eulerAngles = Vector3.Lerp(currObject.transform.rotation.eulerAngles, to, Time.deltaTime * speed);
+
+                Debug.Log("Move " + Vector3.Distance(currObject.transform.eulerAngles, to));
+                currObject.transform.localRotation = Quaternion.Slerp(currObject.transform.localRotation, target, speed);
             }
             else //Once we reach the location to instantiate 
             {
+                Debug.Log("Time");
+                //  currObject.transform.rotation = new Quaternion(to);
                 currObject.transform.eulerAngles = to;
+                
                 //explosion for the object
+                Instantiate(create, transform.position, Quaternion.identity);
 
-            }*/
+                //Create the level piece
+                Instantiate(level[currItem], transform.position, Quaternion.identity);
+                Spawn = false;
+                t = 0;
+            }
         }
         else if(!Spawn)
         {
-            /*
+            t += Time.deltaTime / fTime;
             Vector3 to = vArray[CurrArm];
-            if (Vector3.Distance(currObject.transform.eulerAngles, to) > 0.01f)
+            Quaternion target = Quaternion.Euler(vArray[CurrArm]);
+            if (Vector3.Distance(currObject.transform.eulerAngles, to) >= 0.01f && t <= fTime)
             {
-                currObject.transform.eulerAngles = Vector3.Lerp(currObject.transform.rotation.eulerAngles, to, Time.deltaTime * speed);
+                Debug.Log("Reset");
+                currObject.transform.localRotation = Quaternion.Slerp(currObject.transform.localRotation, target, t);
             }
             else //Once we reach the location to instantiate 
             {
+                Debug.Log("Set");
                 currObject.transform.eulerAngles = to;
-                //explosion for the object
-                //Instantiate(create, transform.position, Quaternion.identity);
-
-                //Create the level piece
-                //Instantiate(level[currItem], transform.position, Quaternion.identity);
-                //Spawn = false;
-            }*/
+            }
         }
 
  //       mat.SetFloat("_DissolveAmount", Mathf.Sin(Time.time) / 2 + 0.5f);	

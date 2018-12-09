@@ -10,6 +10,7 @@ TagManager:
   - Player2
   - Test
   - LeftArm
+  - RightArm
   layers:
   - Default
   - TransparentFX

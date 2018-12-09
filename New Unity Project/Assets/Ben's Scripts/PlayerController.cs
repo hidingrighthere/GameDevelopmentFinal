@@ -147,7 +147,6 @@ public class PlayerController : MonoBehaviour
         //If Y is pressed, change the speed
         if (Input.GetKeyDown(KeyCode.F))
         {
-            GetComponent<Rigidbody>().useGravity = false; //Get rid of gravity
             var createFireWings = Instantiate(FireWings, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
             createFireWings.transform.Rotate(90, 0, 0);
             createFireWings.transform.parent = gameObject.transform;
