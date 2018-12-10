@@ -1758,6 +1758,11 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 13.2
       objectReference: {fileID: 0}
+    - target: {fileID: 114442508663930868, guid: e91b0e6699d45da42a5b437db5e42800,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e91b0e6699d45da42a5b437db5e42800, type: 2}
   m_IsPrefabAsset: 0
@@ -2578,11 +2583,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35eb24309a048fe408806977b2904d36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mat: {fileID: 0}
-  newCol: {r: 0, g: 0, b: 0, a: 0}
   rmsValue: 0
   dbValue: 0
   pitchValue: 0
+  RotateX: 0
+  RotateY: 0
+  RotateZ: 0
+  myY: 0
+  radius: 15
   visualModifier: 50
   smoothSpeed: 10
   maxVisualScale: 25
