@@ -11,6 +11,7 @@ TagManager:
   - Test
   - LeftArm
   - RightArm
+  - HeartLight
   layers:
   - Default
   - TransparentFX
