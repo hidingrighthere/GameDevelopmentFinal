@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: fe39ec06a79b8b741b5445fea733d396
+guid: 0ac6c4b5f2a670e4f86b32fc0c32f0a3
 ModelImporter:
   serializedVersion: 23
   fileIDToRecycleName:
@@ -218,7 +218,6 @@ ModelImporter:
     legStretch: 0.05
     feetSpacing: 0
     rootMotionBoneName: Bip001
-    rootMotionBoneRotation: {x: -0.35785115, y: 0.43844944, z: 0.66732025, w: 0.4841367}
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
