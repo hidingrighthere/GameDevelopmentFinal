@@ -12,6 +12,7 @@ TagManager:
   - LeftArm
   - RightArm
   - HeartLight
+  - Goal
   layers:
   - Default
   - TransparentFX
