@@ -117,7 +117,7 @@ public class PlayerController : MonoBehaviour
         }
 
 
-        playerMove.z = transform.forward.z; //Constantly moves us forward
+        playerMove.z = transform.forward.z * speed; //Constantly moves us forward
         playerMove.x = transform.forward.x * sideSpeed;
 
         playerController.Move(playerMove * Time.deltaTime);
