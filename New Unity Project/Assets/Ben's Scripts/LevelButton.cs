@@ -15,7 +15,7 @@ public class LevelButton : MonoBehaviour {
                 SceneManager.LoadScene("Level2");
                 break;
             case 3:
-                SceneManager.LoadScene("Level3");
+                SceneManager.LoadScene("LevelTest");
                 break;
             case 4:
                 SceneManager.LoadScene("Level4");
